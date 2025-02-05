@@ -5,11 +5,13 @@ import {Weather} from '../../../models/weather';
 export interface WeatherState {
   weather: Weather | null;
   error: string | null;
+  isLoading: boolean;
 }
 
 export const initialState: WeatherState = {
   weather: null,
   error: null,
+  isLoading: false
 }
 
 export const weatherFeature = createFeature({
@@ -18,11 +20,13 @@ export const weatherFeature = createFeature({
     initialState,
     on(weatherActions.getWeather, (state: WeatherState) => ({
       ...state,
+      isLoading: true,
       weather: null,
       error: null,
     })),
     on(weatherActions.getWeatherSuccess, (state: WeatherState, { city, openMeteoResponse }) => ({
       ...state,
+      isLoading: false,
       weather: {
         ...state.weather,
         city,
@@ -37,7 +41,13 @@ export const weatherFeature = createFeature({
     })),
     on(weatherActions.getWeatherFailure, (state: WeatherState, { message }) => ({
       ...state,
+      isLoading: false,
       error: message
+    })),
+    on(weatherActions.unsetWeather, (state: WeatherState) => ({
+      ...state,
+      weather: null,
+      error: null,
     }))
   )
 });

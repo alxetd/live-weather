@@ -12,12 +12,19 @@ export class WeatherFacade {
     return this.#store.selectSignal(weatherFeature.selectWeather);
   }
 
+  get isLoading(): Signal<boolean> {
+    return this.#store.selectSignal(weatherFeature.selectIsLoading);
+  }
+
   get error(): Signal<string | null> {
     return this.#store.selectSignal(weatherFeature.selectError);
   }
 
   getWeather(city: string): void {
-    console.log('WeatherFacade.getWeather city', city);
     this.#store.dispatch(weatherActions.getWeather({ city }))
+  }
+
+  unsetWeather(): void {
+    this.#store.dispatch(weatherActions.unsetWeather())
   }
 }

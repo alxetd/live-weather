@@ -5,6 +5,10 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {debounceTime} from 'rxjs';
 import {Weather} from '../../models/weather';
 
+interface WeatherForm {
+  city: FormControl;
+}
+
 @Component({
   selector: 'app-weather',
   imports: [
@@ -18,40 +22,23 @@ export class WeatherComponent implements OnInit {
   readonly #destroyRef = inject(DestroyRef);
   readonly #weatherFacade = inject(WeatherFacade);
 
-  form!: FormGroup;
+  form!: FormGroup<WeatherForm>;
   weather: Signal<Weather | null> = this.#weatherFacade.weather;
+  isLoading: Signal<boolean> = this.#weatherFacade.isLoading;
   error: Signal<string | null> = this.#weatherFacade.error;
   weatherCodeDescription : Signal<string | null> = computed(() => {
-    if (!this.weather()) {
-      return null;
-    }
-
-    const weather = this.weather() as Weather;
-
-    if (weather.weatherCode === 0) {
-      return 'Clear sky ☀️';
-    } else if (weather.weatherCode >= 1 && weather.weatherCode <= 3) {
-      return 'Partly cloudy ⛅';
-    } else if ([45, 48].includes(weather.weatherCode)) {
-      return 'Fog 🌫️';
-    } else if(weather.weatherCode >= 51 && weather.weatherCode <= 57) {
-      return 'Drizzle 🌧️';
-    } else if(weather.weatherCode >= 61 && weather.weatherCode <= 67) {
-      return 'Rain 🌧️';
-    } else if(weather.weatherCode >= 71 && weather.weatherCode <= 77) {
-      return 'Snowfall ❄️';
-    } else if(weather.weatherCode >= 80 && weather.weatherCode <= 82) {
-      return 'Showers 🌦️';
-    } else if(weather.weatherCode >= 95 && weather.weatherCode <= 99) {
-      return 'Thunderstorm ⛈️';
-    }
-
-    return null;
+    return this.weather() ? this.#getWeatherConditions((this.weather() as Weather).weatherCode) : null;
   });
+  showLoadingState: boolean = false;
 
   ngOnInit(): void {
     this.#initializeForm();
     this.#listenChanges();
+  }
+
+  toggleShowLoadingState(): void {
+    this.#weatherFacade.unsetWeather();
+    this.showLoadingState = !this.showLoadingState;
   }
 
   #listenChanges(): void {
@@ -62,8 +49,8 @@ export class WeatherComponent implements OnInit {
         takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe((formValue) => {
-        console.log(formValue);
-        this.#weatherFacade.getWeather(formValue.city);
+        this.#weatherFacade.getWeather(formValue.city.trim());
+        this.showLoadingState = false;
       });
   }
 
@@ -71,5 +58,27 @@ export class WeatherComponent implements OnInit {
     this.form = new FormGroup({
       city: new FormControl<string>('')
     });
+  }
+
+  #getWeatherConditions(code: number): string | null {
+    if (code === 0) {
+      return 'Clear sky ☀️';
+    } else if (code >= 1 && code <= 3) {
+      return 'Partly cloudy ⛅';
+    } else if ([45, 48].includes(code)) {
+      return 'Fog 🌫️';
+    } else if(code >= 51 && code <= 57) {
+      return 'Drizzle 🌧️';
+    } else if(code >= 61 && code <= 67) {
+      return 'Rain 🌧️';
+    } else if(code >= 71 && code <= 77) {
+      return 'Snowfall ❄️';
+    } else if(code >= 80 && code <= 82) {
+      return 'Showers 🌦️';
+    } else if(code >= 95 && code <= 99) {
+      return 'Thunderstorm ⛈️';
+    }
+
+    return null;
   }
 }

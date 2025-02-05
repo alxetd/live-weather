@@ -26,6 +26,13 @@ describe('WeatherFacade', () => {
       store.overrideSelector(weatherFeature.selectWeather, weatherMock);
       expect(facade.weather()).toEqual(weatherMock);
     });
+
+    it('should select error from store', () => {
+      const errorMessage = 'City not found';
+
+      store.overrideSelector(weatherFeature.selectError, errorMessage);
+      expect(facade.error()).toEqual(errorMessage);
+    });
   });
 
   describe('dispatches', () => {

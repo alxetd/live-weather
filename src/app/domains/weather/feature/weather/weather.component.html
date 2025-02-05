@@ -1,9 +1,13 @@
 <h1>Weather Dashboard</h1>
 <form [formGroup]="form">
   <input type="text" formControlName="city" placeholder="City">
+  <button (click)="toggleShowLoadingState()">Show loading state</button>
 </form>
 @if (error()) {
   <p class="error">{{ error() }}</p>
+}
+@if (isLoading() || showLoadingState) {
+  <div class="loader"></div>
 }
 @if (weather()) {
   <div class="weather">

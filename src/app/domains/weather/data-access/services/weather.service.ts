@@ -33,7 +33,6 @@ export class WeatherService {
   readonly #http = inject(HttpClient);
 
   getNominatium(city: string): Observable<NominatiumResponse[]> {
-    console.log(city);
     const API_URL = `https://nominatim.openstreetmap.org/search?q=${city}&format=json`;
 
     return this.#http.get<NominatiumResponse[]>(API_URL);
