@@ -1,16 +1,25 @@
 <h1>Weather Dashboard</h1>
 <form [formGroup]="form">
-  <input type="text" formControlName="city">
+  <input type="text" formControlName="city" placeholder="City">
 </form>
 @if (error()) {
-  <p>{{ error() }}</p>
+  <p class="error">{{ error() }}</p>
 }
 @if (weather()) {
-  <div>
-    <p><span>City:</span>{{ weather()?.city }}</p>
-    <p><span>Weather Conditions:</span>{{ weatherCodeDescription() }}</p>
-    <p><span>Temperature:</span>{{ weather()?.temperature }} {{ weather()?.temperatureUnit }}</p>
-    <p><span>Humidity:</span>{{ weather()?.humidity }} {{ weather()?.humidityUnit }}</p>
-    <p><span>Wind Speed:</span>{{ weather()?.windSpeed }} {{ weather()?.windSpeedUnit }}</p>
+  <div class="weather">
+    <div class="labels">
+      <p>City:</p>
+      <p>Weather Conditions:</p>
+      <p>Temperature:</p>
+      <p>Humidity:</p>
+      <p>Wind Speed:</p>
+    </div>
+    <div class="data">
+      <p>{{ weather()?.city }}</p>
+      <p>{{ weatherCodeDescription() }}</p>
+      <p>{{ weather()?.temperature }} {{ weather()?.temperatureUnit }}</p>
+      <p>{{ weather()?.humidity }} {{ weather()?.humidityUnit }}</p>
+      <p>{{ weather()?.windSpeed }} {{ weather()?.windSpeedUnit }}</p>
+    </div>
   </div>
 }

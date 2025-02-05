@@ -29,21 +29,21 @@ export class WeatherComponent implements OnInit {
     const weather = this.weather() as Weather;
 
     if (weather.weatherCode === 0) {
-      return 'Clear sky';
+      return 'Clear sky ☀️';
     } else if (weather.weatherCode >= 1 && weather.weatherCode <= 3) {
-      return 'Partly cloudy';
+      return 'Partly cloudy ⛅';
     } else if ([45, 48].includes(weather.weatherCode)) {
-      return 'Fog';
+      return 'Fog 🌫️';
     } else if(weather.weatherCode >= 51 && weather.weatherCode <= 57) {
-      return 'Drizzle';
+      return 'Drizzle 🌧️';
     } else if(weather.weatherCode >= 61 && weather.weatherCode <= 67) {
-      return 'Rain';
+      return 'Rain 🌧️';
     } else if(weather.weatherCode >= 71 && weather.weatherCode <= 77) {
-      return 'Snowfall';
+      return 'Snowfall ❄️';
     } else if(weather.weatherCode >= 80 && weather.weatherCode <= 82) {
-      return 'Showers';
+      return 'Showers 🌦️';
     } else if(weather.weatherCode >= 95 && weather.weatherCode <= 99) {
-      return 'Thunderstorm';
+      return 'Thunderstorm ⛈️';
     }
 
     return null;

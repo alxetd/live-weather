@@ -1,4 +1,22 @@
 :host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    margin-top: 100px;
+    margin-bottom: 40px;
+  }
+  .weather {
+    display: flex;
+    flex-direction: row;
+
+    .labels {
+      width: 200px;
+    }
+  }
+
   span {
     margin-right: 15px;
   }
